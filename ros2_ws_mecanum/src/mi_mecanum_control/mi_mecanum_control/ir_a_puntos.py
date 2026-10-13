@@ -20,6 +20,10 @@ from rclpy.node import Node
 
 # ===== TODO: puntos de SU variante: (x [m], y [m], θ [rad]) =====
 PUNTOS = [
+    (2.5,0,math.pi/2),
+    (2.5,1,math.pi/2),
+    (0,1,math.pi/2),
+    (0,0,0),
     # (x, y, theta),
 ]
 
