@@ -22,7 +22,7 @@ from rclpy.node import Node
 PUNTOS = [
     (2.5,0,math.pi/2),
     (2.5,1,math.pi/2),
-    (0,1,math.pi/2),
+    (0,1,-1*math.pi/2),
     (0,0,0),
     # (x, y, theta),
 ]
