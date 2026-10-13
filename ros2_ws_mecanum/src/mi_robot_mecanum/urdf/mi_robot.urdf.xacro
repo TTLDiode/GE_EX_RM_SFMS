@@ -141,7 +141,21 @@
   </joint>
   <!-- ===================== Orbbec Astra (Parte 2) ===================== -->
   <!-- TODO: link "camara_link" (caja) con dimensiones y masa de la hoja de datos -->
+  <link name = "camara_link">
+      <visual>
+        <geometry><box size="${0.165} ${0.048} ${0.04}"/></geometry>
+        <material name="negro"><color rgba="0 0 0 1"/></material>
+      </visual>
+      <collision>
+        <geometry><box size="${0.165} ${0.048} ${0.04}"/></geometry>
+      </collision>
+      <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${0.31}"/>
+      <xacro:inercia_caja m="${0.31}" x = "${0.165}" y = "${0.048}" z = "${0.04}"/>
+    </inertial>
 
+    </link>
   <!-- TODO: joint fijo "joint_camara" base_link -> camara_link en la posición de su variante -->
   <joint name="joint_camara" type="fixed">
     <parent link="base_link"/>
@@ -150,28 +164,42 @@
   </joint>
   <!-- TODO: link "camara_optica_link" y joint fijo "joint_camara_optica" desde
        camara_link con rpy = (-π/2, 0, -π/2) (REP-103) -->
-
+  <link name="camara_optica_link">
+    <visual>
+      <geometry>
+        <box size="0.05 0.05 0.10"/>
+      </geometry>
+      <material name="blanco">
+        <color rgba="255 255 255 1"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="joint_camara_optica" type="fixed">
+    <parent link="camara_link"/>
+    <child link="camara_optica_link"/>
+    <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+  </joint>
   <gazebo reference="camara_link">
     <sensor name="astra" type="rgbd_camera">
       <topic>/camara</topic>
       <gz_frame_id>1</gz_frame_id>
-      <update_rate>TODO</update_rate>
+      <update_rate>8</update_rate>
       <always_on>1</always_on>
       <camera>
-        <horizontal_fov>TODO</horizontal_fov>   <!-- en radianes -->
+        <horizontal_fov>${58.4 * 3.14159 / 180}</horizontal_fov>   <!-- en radianes -->
         <image>
-          <width>TODO</width>
-          <height>TODO</height>
+          <width>640</width>
+          <height>480</height>
           <format>R8G8B8</format>
         </image>
         <clip>
-          <near>TODO</near>
-          <far>TODO</far>
+          <near>0.6</near>
+          <far>8.0</far>
         </clip>
         <depth_camera>
           <clip>
-            <near>TODO</near>
-            <far>TODO</far>
+            <near>0.6</near>
+            <far>8.0</far>
           </clip>
         </depth_camera>
       </camera>
