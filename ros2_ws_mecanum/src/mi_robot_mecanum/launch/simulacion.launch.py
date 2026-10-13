@@ -71,20 +71,26 @@ def generate_launch_description():
             '/camara/image@sensor_msgs/msg/Image[gz.msgs.Image',
             '/camara/depth_image@sensor_msgs/msg/Image[gz.msgs.Image',
             '/camara/points@sensor_msgs/msg/PointCloud2[gz.msgs.Point',
+            '/camara/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo',
         ],
         # TODO: remapping del joint_state de Gazebo a /joint_states
+        remappings=[('/joint_state', '/joint_states')],
         parameters=[{'use_sim_time': True}],
         output='screen',
     )
 
     # TODO (Parte 3): nodo 'cinematica' del paquete mi_mecanum_control, con use_sim_time
-
+    cinematica = Node(
+        package='mi_mecanum_control', executable='cinematica',
+        parameters=[{'use_sim_time': True}],
+        output='screen',
+    )
     rviz_node = Node(
         package='rviz2', executable='rviz2', arguments=['-d', rviz_file],
         parameters=[{'use_sim_time': True}], condition=IfCondition(rviz),
     )
 
     return LaunchDescription([
-        DeclareLaunchArgument('rviz', default_value='true'),
+        DeclareLaunchArgument('rviz', default_value='true'), cinematica,
         gazebo, robot_state_publisher, spawn, bridge, rviz_node,   # TODO: agregar cinematica
     ])

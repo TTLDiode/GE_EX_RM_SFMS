@@ -26,9 +26,9 @@ from std_msgs.msg import Float64
 from tf2_ros import TransformBroadcaster
 
 # ===== TODO: parámetros físicos de SU variante (deben coincidir con el xacro) =====
-A_RUEDA = None     # a  : rueda_radio
-LX = None          # lx : distancia_ejes / 2
-LY = None          # ly : separacion_ruedas / 2
+A_RUEDA = 0.07    # a  : rueda_radio
+LX = 0.42/2          # lx : distancia_ejes / 2
+LY = 0.38/2          # ly : separacion_ruedas / 2
 
 RUEDAS = ['del_izq', 'del_der', 'tra_izq', 'tra_der']
 JOINTS = [f'joint_rueda_{p}' for p in RUEDAS]
