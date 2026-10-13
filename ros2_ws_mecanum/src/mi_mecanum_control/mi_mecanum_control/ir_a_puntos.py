@@ -47,7 +47,13 @@ def ley_control(pose, meta):
     Devuelve (u, v, r, alcanzado)
     """
     # TODO 1: errores de posición (en odom) y de orientación (envuelto)
+    ex = meta[0] - pose[0]
+    ey = meta[1] - pose[1]
+    ephi = envolver(meta[2] - pose[2])
+
     # TODO 2: ¿alcanzado? (TOL_POS y TOL_ANG) -> devolver 0, 0, 0, True
+    if math.sqrt(ex**2 + ey**2) < TOL_POS and abs(ephi) < TOL_ANG:
+        return 0.0, 0.0, 0.0, True
     # TODO 3: ξ = J(φ)⁺ Λ e
     # TODO 4: saturar la NORMA de (u, v) a V_MAX conservando la dirección, y |r| a R_MAX
     raise NotImplementedError
