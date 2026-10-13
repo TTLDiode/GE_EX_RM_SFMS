@@ -107,7 +107,7 @@
   <gazebo reference="lidar_link">
     <sensor name="rplidar_a3" type="gpu_lidar">
       <topic>/scan</topic>
-      <gz_frame_id> 0 </gz_frame_id>
+      <gz_frame_id> lidar_link </gz_frame_id>
       <update_rate>8</update_rate>
       <always_on>1</always_on>
       <visualize>true</visualize>
@@ -182,7 +182,7 @@
   <gazebo reference="camara_link">
     <sensor name="astra" type="rgbd_camera">
       <topic>/camara</topic>
-      <gz_frame_id>1</gz_frame_id>
+      <gz_frame_id>camara_link</gz_frame_id>
       <update_rate>8</update_rate>
       <always_on>1</always_on>
       <camera>
@@ -218,10 +218,23 @@
   </xacro:macro>
 
   <gazebo>
+    <plugin filename= "gz-sim-sensors-system" name="gz::sim::systems::Sensors">  
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
     <xacro:motor prefijo="del_izq"/>
     <!-- TODO: motores de del_der, tra_izq y tra_der -->
-
-    <!-- TODO: plugin gz-sim-joint-state-publisher-system (encoders) -->
+     <xacro:motor prefijo="tra_izq"/>
+     <xacro:motor prefijo="tra_der"/> 
+     <xacro:motor prefijo="del_der"/>  
+    <!-- TODO: plugin gz-sim-joint-state-publisher-system (encoders) -->      
+    <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+      <joint_name>joint_rueda_del_izq</joint_name>
+      <joint_name>joint_rueda_del_der</joint_name>
+      <joint_name>joint_rueda_tra_izq</joint_name>
+      <joint_name>joint_rueda_tra_der</joint_name>
+      <topic>/encoders</topic>
+    </plugin>
   </gazebo>
 
 </robot>

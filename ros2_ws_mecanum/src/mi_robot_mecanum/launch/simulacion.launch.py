@@ -59,9 +59,18 @@ def generate_launch_description():
             '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
             # TODO (Parte 3): motores /vel_rueda_del_izq, /vel_rueda_del_der,
             #                 /vel_rueda_tra_izq, /vel_rueda_tra_der  (std_msgs/Float64)
+            '/velrueda_del_izq@std_msgs/msg/Float64[gz.msgs.Double',
+            '/velrueda_del_der@std_msgs/msg/Float64[gz.msgs.Double',
+            '/velrueda_tra_izq@std_msgs/msg/Float64[gz.msgs.Double',
+            '/velrueda_tra_der@std_msgs/msg/Float64[gz.msgs.Double',
             # TODO: encoders  /world/pista/model/mi_robot/joint_state
+            'joint_state@sensor_msgs/msg/JointState[gz.msgs.Model',
             # TODO: LiDAR     /scan
+            '/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan',
             # TODO: cámara    /camara/image, /camara/depth_image, /camara/points, /camara/camera_info
+            '/camara/image@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/camara/depth_image@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/camara/points@sensor_msgs/msg/PointCloud2[gz.msgs.Point',
         ],
         # TODO: remapping del joint_state de Gazebo a /joint_states
         parameters=[{'use_sim_time': True}],
