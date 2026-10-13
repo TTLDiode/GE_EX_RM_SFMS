@@ -55,8 +55,20 @@ def ley_control(pose, meta):
     if math.sqrt(ex**2 + ey**2) < TOL_POS and abs(ephi) < TOL_ANG:
         return 0.0, 0.0, 0.0, True
     # TODO 3: ξ = J(φ)⁺ Λ e
+    # J(φ)⁺ = [[cosφ, sinφ, 0], [-sinφ, cosφ, 0], [0, 0, 1]]
+    u = L1 * (math.cos(pose[2]) * ex + math.sin(pose[2]) * ey)
+    v = L2 * (-math.sin(pose[2]) * ex + math.cos(pose[2]) * ey)
+    r = L3 * ephi
     # TODO 4: saturar la NORMA de (u, v) a V_MAX conservando la dirección, y |r| a R_MAX
+    norm = math.sqrt(u**2 + v**2)
+    if norm > V_MAX:
+        u = u / norm * V_MAX
+        v = v / norm * V_MAX
+    if abs(r) > R_MAX:
+        r = R_MAX * (r / abs(r))
+    return u, v, r, False
     raise NotImplementedError
+    
 
 
 class IrAPuntos(Node):
