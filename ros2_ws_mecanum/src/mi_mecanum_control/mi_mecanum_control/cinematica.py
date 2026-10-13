@@ -56,7 +56,7 @@ class Cinematica(Node):
     def __init__(self):
         super().__init__('cinematica')
         self.W = matriz_W(A_RUEDA, LX, LY)
-        self.W_pinv = None   # TODO: ω = W⁺ ξ
+        self.W_pinv = np.linalg.pinv(self.W)   # TODO: ω = W⁺ ξ
 
         # Inversa
         self.create_subscription(Twist, '/cmd_vel', self.cb_cmd_vel, 10)
@@ -76,7 +76,10 @@ class Cinematica(Node):
     # ---------- Cinemática inversa: ω = W⁺ ξ ----------
     def cb_cmd_vel(self, msg):
         # TODO: armar ξ desde msg, calcular ω y publicar cada ω en su publisher (Float64)
-        pass
+        zita = np.array([msg.linear.x, msg.linear.y, msg.angular.z])
+        omega = self.W_pinv @ zita
+        for i, pub in enumerate(self.pubs):
+            pub.publish(Float64(data=omega[i])) 
 
     # ---------- Cinemática directa: ξ = W ω, y odometría ----------
     def cb_joints(self, msg):
@@ -97,6 +100,10 @@ class Cinematica(Node):
 
         # TODO: calcular u, v, r con W y actualizar self.x, self.y, self.phi
         u = v = r = 0.0
+        zita = self.W @ omega
+        u, v, r = zita[0], zita[1], zita[2]
+        self.x, self.y, self.phi = integrar(self.x, self.y, self.phi, u, v, r, dt)
+
 
         qz, qw = math.sin(self.phi / 2.0), math.cos(self.phi / 2.0)
         stamp = ahora.to_msg()
@@ -106,6 +113,13 @@ class Cinematica(Node):
         odom.header.frame_id = 'odom'
         odom.child_frame_id = 'base_link'
         # TODO: llenar odom.pose.pose (posición y orientación) y odom.twist.twist (u, v, r)
+        odom.pose.pose.position.x = self.x
+        odom.pose.pose.position.y = self.y
+        odom.pose.pose.orientation.z = qz
+        odom.pose.pose.orientation.w = qw
+        odom.twist.twist.linear.x = u
+        odom.twist.twist.linear.y = v
+        odom.twist.twist.angular.z = r  
         self.pub_odom.publish(odom)
 
         t = TransformStamped()
